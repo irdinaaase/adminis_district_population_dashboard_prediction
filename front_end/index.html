@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysia Population Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Malaysia Population Analysis</h1>
+    </header>
+    
+    <nav>
+        <a href="#" class="nav-link active" data-page="about">About</a>
+        <a href="#" class="nav-link" data-page="dashboard">Dashboard</a>
+        <a href="#" class="nav-link" data-page="prediction">Prediction</a>
+    </nav>
+    
+    <div class="container">
+        <!-- About Page -->
+<!-- About Page -->
+<div id="about" class="page active">
+    <h2>About This Dashboard</h2>
+    <p>This interactive dashboard provides insights into Malaysia's population data across different states and districts.</p>
+    
+    <h3>💡 Key Features:</h3>
+    <ul>
+        <li>Visualize population trends over time</li>
+        <li>Compare demographics by region</li>
+        <li>View breakdowns by gender and ethnicity</li>
+        <li>Predict future population numbers</li>
+    </ul>
+    
+    <h4>💡 Data Source</h4>
+    <p>This dashboard uses official population data from:</p>
+    
+    <div class="data-source">
+        <p><strong>Population Table: Administrative Districts</strong></p>
+        <p>Data as of 2024</p>
+        <p>Population at district level from 2020 to 2024, by sex, age group and ethnicity.</p>
+        <a href="https://data.gov.my/data-catalogue/population_district" target="_blank" class="source-link">View original dataset on data.gov.my</a>
+    </div>
+    
+    <h5>💡 How is this data produced?</h5>
+    <p>Values for 2020 are based on adjusted data from the Population Censuses conducted in that year. Values for all other years are intercensal mid-year population estimates. The intercensal estimates were generated using the cohort-component method, which estimates the latest year's population by taking the previous year's value, then adding births, subtracting deaths, and adding net migration.</p>
+    
+    <h6>💡 What caveats should I bear in mind when using this data?</h6>
+    <p>Values for breakdowns may be slightly different to totals when summed, due to rounding to one decimal place.</p>
+    
+    <h7>💡 Metadata</h7>
+    <div class="metadata">
+        <p><strong>Last updated</strong>: 31 Aug 2024, 12:00</p>
+        <p><strong>Next update</strong>: 31 Aug 2025, 12:00</p>
+        <p><strong>Data source</strong>: Department of Statistics Malaysia</p>
+        <p><strong>License</strong>: Creative Commons Attribution 4.0 International License (CC BY 4.0)</p>
+    </div>
+</div>
+        
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <h2>Population Dashboard</h2>
+            <p>Explore Malaysia's population data through interactive visualizations.</p>
+            
+            <div class="dashboard-container">
+                <iframe 
+                    width="100%" 
+                    height="600" 
+                    src="https://lookerstudio.google.com/embed/reporting/34f3b5bb-72f0-4ba7-9853-4050209da16f/page/vAoNF" 
+                    frameborder="0" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        
+        <!-- Prediction Page -->
+        <div id="prediction" class="page">
+            <h2>Population Prediction Tool</h2>
+            <p>Estimate future population numbers based on historical trends.</p>
+            
+            <div class="prediction-form">
+                <div class="form-group">
+                    <label for="state">State:</label>
+                    <select id="state">
+                        <option value="">Select State</option>
+                        <option value="Johor">Johor</option>
+                        <option value="Kedah">Kedah</option>
+                        <option value="Kelantan">Kelantan</option>
+                        <option value="Melaka">Melaka</option>
+                        <option value="Negeri Sembilan">Negeri Sembilan</option>
+                        <option value="Pahang">Pahang</option>
+                        <option value="Perak">Perak</option>
+                        <option value="Perlis">Perlis</option>
+                        <option value="Pulau Pinang">Pulau Pinang</option>
+                        <option value="Sabah">Sabah</option>
+                        <option value="Sarawak">Sarawak</option>
+                        <option value="Selangor">Selangor</option>
+                        <option value="Terengganu">Terengganu</option>
+                        <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
+                        <option value="W.P. Labuan">W.P. Labuan</option>
+                        <option value="W.P. Putrajaya">W.P. Putrajaya</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="district">District:</label>
+                    <select id="district" disabled>
+                        <option value="">First select a state</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year">Prediction Year:</label>
+                    <input type="number" id="year" min="2023" max="2050" value="2025">
+                </div>
+                
+                <button id="predictBtn">Calculate Prediction</button>
+                
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+                
+                <div id="result" class="result">
+                    <div class="loader" id="loader"></div>
+                    <h3>Prediction Result</h3>
+                    <p>The estimated population for <span id="resultLocation"></span> in <span id="resultYear"></span> is:</p>
+                    <p class="prediction-value"><span id="resultValue"></span></p>
+                    <button id="retryBtn" class="retry-button" style="display: none;">Try Again</button>
+                </div>
+                
+                <div id="debugInfo" class="debug-info"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State-District mapping (complete list for Malaysia)
+        const stateDistricts = {
+            "Johor": [
+                "Batu Pahat", "Johor Bahru", "Kluang", "Kota Tinggi", "Kulai", 
+                "Mersing", "Muar", "Pontian", "Segamat", "Tangkak"
+            ],
+            "Kedah": [
+                "Alor Setar", "Baling", "Bandar Baharu", "Kota Setar", "Kuala Muda", 
+                "Kubang Pasu", "Kulim", "Langkawi", "Padang Terap", "Pendang", 
+                "Pokok Sena", "Sik", "Yan"
+            ],
+            "Kelantan": [
+                "Bachok", "Gua Musang", "Jeli", "Kota Bharu", "Kuala Krai", 
+                "Machang", "Pasir Mas", "Pasir Puteh", "Tanah Merah", "Tumpat"
+            ],
+            "Melaka": [
+                "Alor Gajah", "Jasin", "Melaka Tengah"
+            ],
+            "Negeri Sembilan": [
+                "Jelebu", "Jempol", "Kuala Pilah", "Port Dickson", "Rembau", 
+                "Seremban", "Tampin"
+            ],
+            "Pahang": [
+                "Bentong", "Bera", "Cameron Highlands", "Jerantut", "Kuantan", 
+                "Lipis", "Maran", "Pekan", "Raub", "Rompin", 
+                "Temerloh"
+            ],
+            "Perak": [
+                "Bagan Datuk", "Batang Padang", "Hilir Perak", "Hulu Perak", "Kampar", 
+                "Kerian", "Kinta", "Kuala Kangsar", "Larut Matang Selama", "Manjung", 
+                "Muallim", "Perak Tengah", "Teluk Intan"
+            ],
+            "Perlis": [
+                "Perlis"
+            ],
+            "Pulau Pinang": [
+                "Barat Daya", "Seberang Perai Selatan", "Seberang Perai Utara", "Timur Laut"
+            ],
+            "Sabah": [
+                "Beaufort", "Beluran", "Keningau", "Kinabatangan", "Kota Belud", 
+                "Kota Kinabalu", "Kota Marudu", "Kuala Penyu", "Kudat", "Kunak", 
+                "Lahad Datu", "Nabawan", "Papar", "Penampang", "Pitas", 
+                "Putatan", "Ranau", "Sandakan", "Semporna", "Sipitang", 
+                "Tambunan", "Tawau", "Telupid", "Tenom", "Tuaran"
+            ],
+            "Sarawak": [
+                "Bau", "Belaga", "Betong", "Bintulu", "Dalat", 
+                "Daro", "Julau", "Kanowit", "Kapit", "Kuching", 
+                "Lawas", "Limbang", "Lubok Antu", "Lundu", "Marudi", 
+                "Matu", "Meradong", "Miri", "Mukah", "Pakan", 
+                "Pusa", "Samarahan", "Saratok", "Sarikei", "Sebauh", 
+                "Selangau", "Serian", "Sibu", "Simunjan", "Song", 
+                "Sri Aman", "Tatau", "Tebedu"
+            ],
+            "Selangor": [
+                "Gombak", "Hulu Langat", "Hulu Selangor", "Klang", "Kuala Langat", 
+                "Kuala Selangor", "Petaling", "Sabak Bernam", "Sepang", "Shah Alam"
+            ],
+            "Terengganu": [
+                "Besut", "Dungun", "Hulu Terengganu", "Kemaman", "Kuala Nerus", 
+                "Kuala Terengganu", "Marang", "Setiu"
+            ],
+            "W.P. Kuala Lumpur": [
+                "W.P. Kuala Lumpur"
+            ],
+            "W.P. Labuan": [
+                "W.P. Labuan"
+            ],
+            "W.P. Putrajaya": [
+                "W.P. Putrajaya"
+            ]
+        };
+
+        // Navigation between pages
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show selected page
+                const pageId = this.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+        
+        // Update districts when state changes
+        document.getElementById('state').addEventListener('change', function() {
+            const state = this.value;
+            const districtSelect = document.getElementById('district');
+            
+            // Clear previous options
+            districtSelect.innerHTML = '';
+            
+            if (state) {
+                // Add districts for selected state
+                districtSelect.disabled = false;
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                
+                stateDistricts[state].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            } else {
+                // No state selected
+                districtSelect.disabled = true;
+                districtSelect.innerHTML = '<option value="">First select a state</option>';
+            }
+        });
+        
+        // Reset all messages and UI states
+        function resetUI() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('debugInfo').style.display = 'none';
+            document.getElementById('retryBtn').style.display = 'none';
+        }
+    
+        // Show error message
+        function showError(message, debugInfo = null) {
+            resetUI();
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            if (debugInfo) {
+                const debugElement = document.getElementById('debugInfo');
+                debugElement.textContent = `Debug Info: ${JSON.stringify(debugInfo, null, 2)}`;
+                debugElement.style.display = 'block';
+            }
+            
+            document.getElementById('retryBtn').style.display = 'block';
+        }
+        
+        // Show success message
+        function showSuccess(message) {
+            resetUI();
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+        }
+        
+        // Enhanced prediction function with detailed error handling
+        async function calculatePrediction() {
+            const state = document.getElementById('state').value;
+            const district = document.getElementById('district').value;
+            const year = document.getElementById('year').value;
+            
+            // Validate inputs
+            if (!state || !district) {
+                showError('Please select both state and district');
+                return;
+            }
+            
+            if (!year || isNaN(year) || year < 2023 || year > 2050) {
+                showError('Please enter a valid year between 2023 and 2050');
+                return;
+            }
+
+            try {
+                // UI Loading state
+                document.getElementById('predictBtn').disabled = true;
+                document.getElementById('predictBtn').textContent = 'Calculating...';
+                document.getElementById('loader').style.display = 'block';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('resultValue').textContent = '';
+                resetUI();
+                
+                // Prepare the request
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbzYV8nkzDuz6XQn7_TJRTejHlZYoERM3PIl5OloSYCy0T5-Ef2cPfISbLdp_zkTGxttGQ/exec';
+                const params = new URLSearchParams({
+                    state: state,
+                    district: district,
+                    year: year
+                });
+                
+                const url = `${scriptUrl}?${params.toString()}`;
+                const startTime = Date.now();
+                
+                // Make the request with timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    redirect: 'follow'
+                }).finally(() => clearTimeout(timeoutId));
+                
+                const responseTime = Date.now() - startTime;
+                
+                // Check if response is okay
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status} ${response.statusText}`);
+                }
+                
+                // Parse response
+                const responseData = await response.text();
+                
+                // Check if response contains "Error:" which means server-side error
+                if (responseData.startsWith('Error:')) {
+                    throw new Error(responseData.replace('Error:', '').trim());
+                }
+                
+                // Validate response is a number
+                const prediction = parseInt(responseData.replace(/,/g, ''));
+                if (isNaN(prediction)) {
+                    throw new Error(`Invalid prediction value: ${responseData}`);
+                }
+                
+                // Display result
+                document.getElementById('resultLocation').textContent = `${district}, ${state}`;
+                document.getElementById('resultYear').textContent = year;
+                document.getElementById('resultValue').textContent = prediction.toLocaleString();
+                
+                showSuccess('Prediction calculated successfully');
+                
+            } catch (error) {
+                console.error('Prediction error:', error);
+                
+                let errorMessage = 'Failed to calculate prediction';
+                if (error.message.includes('State') || error.message.includes('District')) {
+                    errorMessage = `Data issue: ${error.message}`;
+                } else if (error.message.includes('Year must be')) {
+                    errorMessage = error.message;
+                } else if (error.name === 'AbortError') {
+                    errorMessage = 'Request timed out (10 seconds)';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Network error - could not connect to server';
+                }
+                
+                document.getElementById('resultValue').textContent = 'Error';
+                showError(errorMessage);
+                
+            } finally {
+                // Reset UI
+                document.getElementById('predictBtn').disabled = false;
+                document.getElementById('predictBtn').textContent = 'Calculate Prediction';
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('predictBtn').addEventListener('click', calculatePrediction);
+        document.getElementById('retryBtn').addEventListener('click', calculatePrediction);
+        
+        // Additional validation
+        document.getElementById('year').addEventListener('change', function() {
+            const year = parseInt(this.value);
+            if (year < 2023 || year > 2050) {
+                showError('Please enter a year between 2023 and 2050');
+            } else {
+                resetUI();
+            }
+        });
+    </script>
+    
+        <!-- ====== FOOTER ====== -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Malaysia Population Analysis</h3>
+                <p>Providing insights into demographic trends across Malaysian states and districts.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" class="footer-link" data-page="about">About</a></li>
+                    <li><a href="#" class="footer-link" data-page="dashboard">Dashboard</a></li>
+                    <li><a href="#" class="footer-link" data-page="prediction">Prediction Tool</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Data Sources</h3>
+                <ul>
+                    <li><a href="https://data.gov.my" target="_blank" class="footer-link">data.gov.my</a></li>
+                    <li><a href="https://www.dosm.gov.my" target="_blank" class="footer-link">DOSM</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- NEW: Student Information Section -->
+        <div class="student-info">
+            <div>
+                <strong>Last accessed:</strong> 
+                <span id="lastAccessedDate"></span>
+            </div>
+            <div>
+                <strong>Created by:</strong> 
+                Irdina NurBalqis Binti Abdul Rashid (Matric: 295286)
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Malaysia Population Analysis | Made with ❤️ for data enthusiasts</p>
+        </div>
+    </footer>
+
+    <script>
+        // Automatically display current date as last accessed
+        document.getElementById('lastAccessedDate').textContent = new Date().toLocaleDateString('en-MY', {
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    </script>
+</body>
+</html>

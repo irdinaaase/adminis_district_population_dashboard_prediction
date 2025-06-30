@@ -1,0 +1,627 @@
+/* ====== GENERAL STYLES ====== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* STRONG GRADIENT SWEEP ANIMATION */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(225deg, rgba(211, 47, 47, 0.25) 0%, transparent 60%);
+  animation: gradientFlow 8s ease infinite;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* BOLD MOVING PARTICLES */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(0, 51, 153, 0.15) 0%, transparent 80%);
+  background-size: 200px;
+  animation: particleMove 20s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes particleMove {
+  from { background-position: 0 0; }
+  to { background-position: 200px 200px; }
+}
+
+/* ====== HEADER STYLES ====== */
+header {
+  background: linear-gradient(135deg, #003399, #0066cc);
+  color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+  transform: rotate(30deg);
+  animation: shine 6s infinite linear;
+}
+
+@keyframes shine {
+  0% { transform: rotate(30deg) translate(-30%, -30%); }
+  100% { transform: rotate(30deg) translate(30%, 30%); }
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  padding-bottom: 15px;
+  display: inline-block;
+}
+
+header h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #d32f2f, #ff7043);
+  border-radius: 2px;
+}
+
+/* ====== NAVIGATION ====== */
+nav {
+  text-align: center;
+  background-color: #fff;
+  padding: 15px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 10;
+}
+
+nav a {
+  display: inline-block;
+  margin: 0 10px;
+  padding: 12px 25px;
+  color: #d32f2f;
+  background: rgba(252, 228, 236, 0.8);
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+nav a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(211, 47, 47, 0.2);
+}
+
+nav a.active {
+  background-color: #d32f2f;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+/* ====== MAIN CONTENT ====== */
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+.page {
+  background: #fff;
+  padding: 30px;
+  margin-bottom: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  display: none;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInUp 0.6s forwards;
+  position: relative;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ====== TYPOGRAPHY ====== */
+h2 {
+  color: #003399;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #d32f2f, #ff7043);
+  border-radius: 2px;
+}
+
+h3, h4, h5, h6, h7 {
+  color: #880e4f;
+  font-size: 1.4rem;
+  margin: 25px 0 15px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+h3::after, h4::after, h5::after, h6::after, h7::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #FFFFB7, #FFD400);
+  border-radius: 2px;
+}
+
+/* ====== ABOUT PAGE DIVIDERS ====== */
+/* Divider before Key Features */
+#about h3, #about h4, #about h5, #about h6 {
+  position: relative;
+  padding-top: 30px;
+  margin-top: 30px;
+}
+
+#about h3::before, #about h4::before, #about h5::before, #about h6::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Divider before Metadata */
+#about h7 {
+  position: relative;
+  padding-top: 30px;
+  margin-top: 30px;
+  display: block;
+}
+
+#about h7::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Divider after Data Source content */
+.data-source {
+  position: relative;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.data-source::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* ====== DATA SOURCE STYLES ====== */
+.data-source {
+  background: linear-gradient(to right, #f5f5f5, #fff);
+  border-left: 4px solid #003399;
+  padding: 25px;
+  margin: 30px 0;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.data-source:hover {
+  transform: translateX(5px);
+}
+
+.source-link {
+  display: inline-block;
+  margin-top: 15px;
+  color: #d32f2f;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: rgba(211, 47, 47, 0.1);
+  transition: all 0.3s ease;
+}
+
+.source-link:hover {
+  background: rgba(211, 47, 47, 0.2);
+  transform: translateY(-2px);
+}
+
+.metadata {
+  background: linear-gradient(to right, #e3f2fd, #f5fbff);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 30px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.metadata p {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.metadata p::before {
+  content: '•';
+  color: #d32f2f;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* ====== DASHBOARD STYLES ====== */
+.dashboard-container {
+  margin-top: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.dashboard-container:hover {
+  transform: translateY(-5px);
+}
+
+iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+}
+
+/* ====== PREDICTION FORM ====== */
+.prediction-form {
+  background: rgba(255, 248, 248, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(248, 187, 208, 0.3);
+  padding: 30px;
+  border-radius: 16px;
+  margin-top: 30px;
+  box-shadow: 0 8px 32px rgba(211, 47, 47, 0.1);
+  transition: all 0.4s ease;
+}
+
+.prediction-form:hover {
+  box-shadow: 0 12px 40px rgba(211, 47, 47, 0.15);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+select {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+input[type="number"] {
+  width: 97%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+select:focus, input[type="number"]:focus {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.2);
+  outline: none;
+}
+
+/* ====== BUTTONS ====== */
+button {
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  width: 100%;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(183, 28, 28, 0.3);
+}
+
+button:hover::after {
+  left: 100%;
+}
+
+/* ====== RESULTS ====== */
+.result {
+  margin-top: 30px;
+  background: linear-gradient(135deg, #FFD100, #FFD400);
+  border: 1px solid #FFF192;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(255, 138, 138, 0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.2); }
+  70% { box-shadow: 0 0 0 15px rgba(211, 47, 47, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+}
+
+.prediction-value {
+  font-size: 2.2rem;
+  color: #FFFFFF ;
+  font-weight: 800;
+  margin: 15px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ====== FOOTER ====== */
+footer {
+  background: linear-gradient(135deg, #003399, #002266);
+  color: #fff;
+  padding: 50px 0 0;
+  margin-top: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z"></path></svg>');
+  background-size: cover;
+  opacity: 0.1;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.footer-section h3 {
+  color: #fff;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: #d32f2f;
+}
+
+.footer-section p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 5px 0;
+}
+
+.footer-link:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+.student-info {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(0, 34, 102, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.student-info div {
+  margin: 5px 15px;
+}
+
+.student-info strong {
+  color: #ffcdd2;
+  font-weight: 600;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 20px 0;
+  background: rgba(0, 0, 0, 0.2);
+  margin-top: 30px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ====== RESPONSIVE ADJUSTMENTS ====== */
+@media (max-width: 768px) {
+  .footer-section {
+    flex: 100%;
+    text-align: center;
+  }
+  
+  .footer-section h3::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .student-info {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  #about p,
+  #about ul,
+  #about .data-source {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 2rem;
+  }
+  
+  nav a {
+    padding: 10px 15px;
+    margin: 0 5px 5px;
+  }
+  
+  .page {
+    padding: 20px 15px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    padding-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  /* Reduce background animation intensity on mobile */
+  body::before {
+    animation: gradientFlow 40s ease infinite;
+  }
+  
+  body::after {
+    background-size: 200px 200px;
+    animation: particleMove 120s linear infinite;
+  }
+}
